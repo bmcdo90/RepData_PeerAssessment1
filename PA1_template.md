@@ -5,8 +5,12 @@ output:
     keep_md: true
 ---
 
+This assignment makes use of data from a personal activity monitoring device. This device collects data at 5 minute intervals through out the day. The data consists of two months of data from an anonymous individual collected during the months of October and November, 2012 and include the number of steps taken in 5 minute intervals each day.
 
 ## Loading and preprocessing the data
+First we'll download the data from the course website if it doesn't exist locally and then unzip the contents and load the activity file in a data set to be used later.
+
+
 
 ```r
 zipname <- "activity-monitoring.zip"
