@@ -7,7 +7,8 @@ output:
 
 
 ## Loading and preprocessing the data
-```{r echo=TRUE}
+
+```r
 zipname <- "activity-monitoring.zip"
 filename <- "activity.csv"
 ## Download and unzip the dataset:
@@ -26,7 +27,8 @@ activity<-read.csv(filename)
 ## What is the mean total number of steps taken per day?
 
 * Make a histogram of the total number of steps taken each day
-```{r echo=TRUE}
+
+```r
 ##load libraries
 library(ggplot2)
 library(scales)
@@ -37,26 +39,36 @@ totalsteps$date<-as.Date(totalsteps$date)
 ggplot(data=totalsteps, aes(date, steps)) + geom_histogram(stat="identity")+scale_x_date(breaks = date_breaks("months"), labels = date_format("%b-%y"))
 ```
 
+```
+## Warning: Ignoring unknown parameters: binwidth, bins, pad
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+
 * The **mean** total number of steps taken per day is 
-    `r round(mean(totalsteps$steps), digits=2)` steps.
+    1.076619\times 10^{4} steps.
 * The **median** total number of steps taken per day is 
-    `r round(median(totalsteps$steps), digits=2)` steps.
+    1.0765\times 10^{4} steps.
     
 ## What is the average daily activity pattern?
 * Here is a time series plot of the 5-minute interval and the average number of steps taken, averaged across all days 
-```{r echo=TRUE}
+
+```r
 intervalsteps<-aggregate(steps~interval,data=activity,mean,na.rm=TRUE)
 plot(steps~interval,data=intervalsteps,type="l")
 ```
 
-The **`r intervalsteps[which.max(intervalsteps$steps),]$interval`th** interval contains the maximum number of steps on average across all the days in the dataset.
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
+The **835th** interval contains the maximum number of steps on average across all the days in the dataset.
 
 ## Inputing missing values
 
-The total number of missing values in the dataset (i.e. the total number of rows with NAs) is **`r sum(is.na(activity$steps))`**.
+The total number of missing values in the dataset (i.e. the total number of rows with NAs) is **2304**.
 
 We're going to fill the missing values with the mean of that same interval.
-```{r echo=TRUE}
+
+```r
 ##create a new dataset
 missingactivity<-activity
 ##replace NAs with the mean for that same interval
@@ -69,24 +81,34 @@ totalfilledsteps$date<-as.Date(totalfilledsteps$date)
 ggplot(data=totalfilledsteps, aes(date, steps)) + geom_histogram(stat="identity")+scale_x_date(breaks = date_breaks("months"), labels = date_format("%b-%y"))
 ```
 
-The total number of steps without filling in the NA values is **`r sum(totalsteps$steps)`**.
+```
+## Warning: Ignoring unknown parameters: binwidth, bins, pad
+```
 
-The total number of steps filling in the NA values with the mean for that interval is **`r sum(totalfilledsteps$steps)`**.
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+
+The total number of steps without filling in the NA values is **570608**.
+
+The total number of steps filling in the NA values with the mean for that interval is **6.5673751\times 10^{5}**.
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
 *Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 
-```{r echo=TRUE}
+
+```r
 missingactivity$day<-weekdays(as.Date(missingactivity$date))
 missingactivity$day=ifelse(missingactivity$day %in% c("Sunday", "Saturday"), "weekend","weekday")
 ```
 
 * Make a panel plot containing a time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). 
 
-```{r echo=TRUE}
+
+```r
 intervalstepsfactor=aggregate(steps~interval+day,missingactivity,mean)
 library(lattice)
 xyplot(steps~interval|factor(day),data=intervalstepsfactor,aspect=1/2,type="l")
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
