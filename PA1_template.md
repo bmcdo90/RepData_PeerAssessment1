@@ -66,7 +66,7 @@ plot(steps~interval,data=intervalsteps,type="l")
 
 The **835th** interval contains the maximum number of steps on average across all the days in the dataset.
 
-## Inputing missing values
+## Imputing missing values
 
 The total number of missing values in the dataset (i.e. the total number of rows with NAs) is **2304**.
 
